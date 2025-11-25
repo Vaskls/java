@@ -1,0 +1,5 @@
+Student{name=Bob|age=19|grades=[83, 91]|subjects=[Chemistry;English]}
+Student{name=John|age=21|grades=[75, 63]|subjects=[Math;Informatics]}
+Student{name=Charlie|age=20|grades=[82, 77]|subjects=[Chemistry;Biology]}
+Teacher{name=Dr. John|age=32|salary=10000.0|subjects=[Math;Informatics]}
+Teacher{name=Dr. Smith|age=41|salary=13000.0|subjects=[Chemistry;Biology]}
