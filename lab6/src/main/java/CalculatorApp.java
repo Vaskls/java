@@ -6,6 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -13,28 +15,26 @@ import javafx.stage.Stage;
 public class CalculatorApp extends Application {
 
     private TextField display = new TextField("0");
-    private Label historyDisplay = new Label(""); // The placeholder for the operation
+    private Label historyDisplay = new Label("");
     private double fnum = 0;
     private String operator = "";
     private boolean start = true;
 
     @Override
     public void start(Stage primaryStage) {
-        // --- History Display (Placeholder) ---
+        // --- UI Setup (Same as your original code) ---
         historyDisplay.setAlignment(Pos.CENTER_RIGHT);
         historyDisplay.setMinHeight(30);
         historyDisplay.setMaxWidth(Double.MAX_VALUE);
         historyDisplay.setStyle("-fx-text-fill: #666666; -fx-padding: 0 10 0 0;");
         historyDisplay.setFont(Font.font("Segoe UI", 14));
 
-        // --- Main Display ---
         display.setEditable(false);
         display.setAlignment(Pos.CENTER_RIGHT);
         display.setMinHeight(70);
         display.setStyle("-fx-background-color: transparent; -fx-border-color: none; -fx-text-fill: #000;");
         display.setFont(Font.font("Segoe UI Semibold", 36));
 
-        // --- Grid Layout for Buttons ---
         GridPane grid = new GridPane();
         grid.setHgap(2);
         grid.setVgap(2);
@@ -55,12 +55,28 @@ public class CalculatorApp extends Application {
             if (col > 3) { col = 0; row++; }
         }
 
-        // --- Main Layout ---
         VBox displayArea = new VBox(historyDisplay, display);
         displayArea.setPadding(new Insets(10, 0, 10, 0));
         
-        VBox root = new VBox(displayArea, grid);
-        root.setStyle("-fx-background-color: #e6e6e6;");
+        VBox mainLayout = new VBox(displayArea, grid);
+        mainLayout.setStyle("-fx-background-color: #e6e6e6;");
+
+        StackPane root = new StackPane();
+        
+        root.getChildren().add(mainLayout);
+
+        Pane overlay = new Pane(); 
+        overlay.setPickOnBounds(false);
+
+        Button floatingBtn = new Button("T");
+        floatingBtn.setStyle("-fx-background-color: rgba(255, 0, 0, 0.7); -fx-text-fill: white; -fx-font-weight: bold;");
+        
+        floatingBtn.setLayoutX(55);  
+        floatingBtn.setLayoutY(235); 
+        floatingBtn.setMinSize(40, 40);
+
+        overlay.getChildren().add(floatingBtn);
+        root.getChildren().add(overlay); // Added last = highest Z-index
 
         Scene scene = new Scene(root, 320, 380);
         primaryStage.setTitle("Calculator");
@@ -103,14 +119,12 @@ public class CalculatorApp extends Application {
             start = true;
         } else if (value.equals("=")) {
             if (operator.isEmpty()) return;
-            
             double snum = Double.parseDouble(display.getText());
             historyDisplay.setText(formatNumber(fnum) + " " + operator + " " + formatNumber(snum) + " =");
             calculate(snum);
             operator = "";
             start = true;
         } else {
-            // Operator clicked (+, -, *, /)
             fnum = Double.parseDouble(display.getText());
             operator = value;
             historyDisplay.setText(formatNumber(fnum) + " " + operator);
@@ -139,7 +153,6 @@ public class CalculatorApp extends Application {
         }
     }
 
-    // Helper to remove .0 from whole numbers
     private String formatNumber(double d) {
         if (d == (long) d) return String.format("%d", (long) d);
         return String.valueOf(d);
