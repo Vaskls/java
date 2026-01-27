@@ -40,19 +40,34 @@ public class CalculatorApp extends Application {
         grid.setVgap(2);
         grid.setPadding(new Insets(2));
 
-        String[] labels = {
-            "7", "8", "9", "/",
+        String[] labels1 = {
+            "7", "9", "/",
+        };
+        String[] labels2 = {
             "4", "5", "6", "*",
+        } ;
+        String[] labels3 = {
             "1", "2", "3", "-",
+        } ;
+        String[] labels4 = {
             "C", "0", "=", "+"
+        } ;
+        String[][] rows = {
+            labels1,
+            labels2,
+            labels3,
+            labels4
         };
 
-        int row = 0; int col = 0;
-        for (String label : labels) {
-            Button btn = createButton(label);
-            grid.add(btn, col, row);
-            col++;
-            if (col > 3) { col = 0; row++; }
+        
+        for (int rowIndex = 0; rowIndex < rows.length; rowIndex++) { 
+            String[] currentRow = rows[rowIndex];
+            
+            for (int columnIndex = 0; columnIndex < currentRow.length; columnIndex++) {
+                String label = currentRow[columnIndex];
+                Button btn = createButton(label);
+                grid.add(btn, columnIndex, rowIndex); 
+            }
         }
 
         VBox displayArea = new VBox(historyDisplay, display);
