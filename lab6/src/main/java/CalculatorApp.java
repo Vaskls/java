@@ -87,6 +87,7 @@ public class CalculatorApp extends Application {
     }
 
     private void processEvent(String value) {
+        display.setFont(Font.font("Segoe UI Semibold", 36));
         if (Character.isDigit(value.charAt(0))) {
             if (start) {
                 display.setText(value);
@@ -130,6 +131,7 @@ public class CalculatorApp extends Application {
             }
             display.setText(formatNumber(fnum));
         } catch (ArithmeticException e) {
+            display.setFont(Font.font("Segoe UI Semibold", 16));
             display.setText("Cannot divide by zero");
             historyDisplay.setText("");
             fnum = 0;
